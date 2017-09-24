@@ -22,3 +22,13 @@
    (c0 c1 ...)))
 
 
+(define (plus? o) (eq? '+ o))
+(define (minus? o) (eq? '- o))
+(define (left? o) (eq? '< o))
+(define (right? o) (eq? '> o))
+(define (dot? o) (eq? '. o))
+(define (lbrack? o) (eq? 'lbrack o))
+(define (rbrack? o) (eq? 'rbrack o))
+
+  
+
