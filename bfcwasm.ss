@@ -11,6 +11,7 @@
    (dot (d))
    (lbrack (lb))
    (rbrack (rb)))
+  (entry Prog)
   (Cmd (c)
        p
        m
@@ -18,17 +19,19 @@
        r
        d
        (lb c0 c1 ... rb))
-  (Prog
-   (c0 c1 ...)))
+  (Prog (P)
+        (c0 c1 ...)))
 
 
-(define (plus? o) (eq? '+ o))
-(define (minus? o) (eq? '- o))
-(define (left? o) (eq? '< o))
-(define (right? o) (eq? '> o))
-(define (dot? o) (eq? '. o))
-(define (lbrack? o) (eq? 'lbrack o))
-(define (rbrack? o) (eq? 'rbrack o))
+(define (plus? o) (eqv? #\+ o))
+(define (minus? o) (eqv? #\- o))
+(define (left? o) (eqv? #\< o))
+(define (right? o) (eqv? #\> o))
+(define (dot? o) (eqv? #\. o))
+(define (lbrack? o) (eqv? #\[ o))
+(define (rbrack? o) (eqv? #\] o))
 
-  
+(define-parser sexp->bfast bfast)
 
+(define (parse p)
+  (sexp->bfast (string->list p)))  ; TODO check brackets
