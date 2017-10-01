@@ -33,5 +33,30 @@
 
 (define-parser sexp->bfast bfast)
 
+(define commands (list #\+ #\- #\< #\> #\. #\[ #\]))
+
+(define (command? c) (memv c commands))
+
+(define (parse-prog b)
+  (define (parse-loop l acc)
+    (cond [(null? l) (error 'parse "unclosed loop")]
+          [(eqv? #\] (car l)) (values (cdr l) (reverse (cons #\] acc)))] 
+          [(eqv? #\[ (car l))
+           (let-values ([(rest res) (parse-loop (cdr l) (list (car l)))])
+             (parse-loop rest (cons res acc)))]
+          [else (parse-loop (cdr l) (cons (car l) acc))]))
+  (cond [(null? b) b]
+        [(eqv? #\[ (car b))
+         (let-values ([(rest res) (parse-loop (cdr b) (list (car b)))])
+           (cons res (parse-prog rest)))]
+        [else (cons (car b) (parse-prog (cdr b)))]))
+
+;; Parse a bf program represented as a string,
+;; producing a record in the bfast language. 
+;; As is standard in bf programs, any character that is not a
+;; valid command is considered to be part of a comment and is
+;; filtered out.
 (define (parse p)
-  (sexp->bfast (string->list p)))  ; TODO check brackets
+  (sexp->bfast
+   (parse-prog
+    (filter command? (string->list p)))))
