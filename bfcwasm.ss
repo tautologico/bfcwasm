@@ -60,3 +60,24 @@
   (sexp->bfast
    (parse-prog
     (filter command? (string->list p)))))
+
+(define-pass gen-wasm : bfast (p) -> * ()
+  (definitions
+    (define (emit-plus) (printf "plus\n"))
+    (define (emit-minus) (printf "minus\n"))
+    (define (emit-left) (printf "left\n"))
+    (define (emit-right) (printf "right\n"))
+    (define (emit-dot) (printf "dot\n"))
+    (define (emit-loop) (printf "loop!\n")))
+  (Cmd : Cmd (c) -> * ()
+       [,p (emit-plus)]
+       [,m (emit-minus)]
+       [,l (emit-left)]
+       [,r (emit-right)]
+       [,d (emit-dot)]
+       [(,lb ,c0 ,c1* ... ,rb) (emit-loop)])
+  (Prog : Prog (p) -> * ()
+        [(,c0 ,c1* ...)
+         (Cmd c0)
+         (for-each Cmd c1*)])
+  (Prog p))
