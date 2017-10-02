@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A bf program</title>
+  </head>
+
+  <body>
+    <script>
+      let charBuffer = new Uint8Array(1);
+
+      function setResult(str) {
+        let resdiv = document.querySelector("#result");
+        resdiv.textContent = "str";
+      }
+
+      function asciiChar(chcode) {
+        charBuffer[0] = chcode;
+        let ch = new TextDecoder('utf8').decode(charBuffer);
+        return ch;
+      }
+
+      function appendChResult(chcode) {
+        let resdiv = document.querySelector("#result");
+        let ch = asciiChar(chcode);
+        resdiv.textContent = resdiv.textContent + ch;
+      }
+
+      let environment = { console: { writech: ch => appendChResult(ch) } };
+
+      fetchAndInstantiate('bfprog.wasm', environment).then(function(instance) {
+        instance.exports.program();
+        let fbdiv = document.querySelector("#feedback");
+        fbdiv.textContent = "Finished!";
+      });
+
+      function showState(instance) {
+        alert(`index: ${instance.exports.getindex()}, val: ${instance.exports.getindex()}`);
+      }
+
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response => response.arrayBuffer()
+          ).then(bytes => WebAssembly.instantiate(bytes, importObject)
+          ).then(results => results.instance);
+      }
+    </script>
+
+    <h1>bf program in WebAssembly</h1>
+
+    <div id="result">
+    </div>
+
+    <div id="feedback">
+    </div>
+  </body>
+</html>
