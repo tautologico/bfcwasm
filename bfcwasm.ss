@@ -63,11 +63,11 @@
 
 (define-pass gen-wasm : bfast (p) -> * ()
   (definitions
-    (define (emit-plus) (printf "plus\n"))
-    (define (emit-minus) (printf "minus\n"))
-    (define (emit-left) (printf "left\n"))
-    (define (emit-right) (printf "right\n"))
-    (define (emit-dot) (printf "dot\n"))
+    (define (emit-plus)  (printf "(incr-reg)\n"))
+    (define (emit-minus) (printf "(decr-reg)\n"))
+    (define (emit-left)  (printf "(incr-counter)\n"))
+    (define (emit-right) (printf "(decr-counter)\n"))
+    (define (emit-dot) (printf "(output-char)\n"))
     (define (emit-loop) (printf "loop!\n")))
   (Cmd : Cmd (c) -> * ()
        [,p (emit-plus)]
