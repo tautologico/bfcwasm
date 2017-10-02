@@ -1,2 +1,2 @@
 #!/bin/sh
-export CHEZSCHEMELIBDIRS="/Users/andrei/tmp/repo/nanopass/:."
+export CHEZSCHEMELIBDIRS="$HOME/tmp/repo/nanopass/:."
