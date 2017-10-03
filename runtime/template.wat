@@ -40,6 +40,26 @@
     i32.store)
 
   (func (export "program")
+    (local $c i32)
+    i32.const 50
+    set_local $c
+
+    ;; 50
+    block $g0
+      get_local $c
+      i32.eqz
+      br_if $g0
+      loop $g1
+        call $incracc
+        get_local $c
+        i32.const 1
+        i32.sub
+        tee_local $c        
+        br_if $g1
+      end $g1
+    end $g0
+
+    ;; 60
     call $incracc
     call $incracc
     call $incracc
@@ -51,61 +71,7 @@
     call $incracc
     call $incracc
 
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-    call $incracc
-
+    ;; 70
     call $incracc
     call $incracc
     call $incracc

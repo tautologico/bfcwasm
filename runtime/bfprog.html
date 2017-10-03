@@ -34,10 +34,6 @@
         fbdiv.textContent = "Finished!";
       });
 
-      function showState(instance) {
-        alert(`index: ${instance.exports.getindex()}, val: ${instance.exports.getindex()}`);
-      }
-
       function fetchAndInstantiate(url, importObject) {
         return fetch(url).then(response => response.arrayBuffer()
           ).then(bytes => WebAssembly.instantiate(bytes, importObject)
@@ -50,7 +46,7 @@
     <div id="result">
     </div>
 
-    <div id="feedback">
+    <div id="feedback" style="padding-top:2em;">
     </div>
   </body>
 </html>
