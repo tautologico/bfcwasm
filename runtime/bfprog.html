@@ -9,6 +9,14 @@
     <script>
       let charBuffer = new Uint8Array(1);
 
+      function logval(val) {
+        console.log("val = " + val);
+      }
+
+      function logindex(idx) {
+        console.log("index = " + idx);
+      }
+
       function setResult(str) {
         let resdiv = document.querySelector("#result");
         resdiv.textContent = "str";
@@ -26,7 +34,9 @@
         resdiv.textContent = resdiv.textContent + ch;
       }
 
-      let environment = { console: { writech: ch => appendChResult(ch) } };
+      let environment = { console: { writech: ch => appendChResult(ch),
+                          logval: logval,
+                          logindex: logindex } };
 
       fetchAndInstantiate('bfprog.wasm', environment).then(function(instance) {
         instance.exports.program();
