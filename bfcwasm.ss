@@ -61,6 +61,11 @@
    (parse-prog
     (filter command? (string->list p)))))
 
+(define (parse-file fname)
+  (call-with-port (open-file-input-port fname (file-options) (buffer-mode block) (native-transcoder))
+                  (lambda (port)
+                    (parse (get-string-all port)))))
+
 ;; TODO improve on printf to emit code; improve emitted code
 (define-pass gen-wasm : bfast (p) -> * ()
   (definitions
@@ -103,12 +108,15 @@
       (printf "  (func (export \"program\")\n"))
     (define (emit-plus)  (printf "    call $incracc\n"))
     (define (emit-minus) (printf "    call $decracc\n"))
-    (define (emit-left)  (printf "    call $incrindex\n"))
-    (define (emit-right) (printf "    call $decrindex\n"))
-    (define (emit-dot)   (printf "    call $output\n"))
+    (define (emit-left)  (printf "    call $decrindex\n"))
+    (define (emit-right) (printf "    call $incrindex\n"))
+    (define (emit-dot)
+      (printf "    get_global $i\n")
+      (printf "    i32.load\n")
+      (printf "    call $writech\n"))
     (define (emit-loop c0 c1*)
-      (define exit-label (format "    $~a" (gensym)))
-      (define loop-label (format "    $~a" (gensym)))
+      (define exit-label (format "$~a" (gensym)))
+      (define loop-label (format "$~a" (gensym)))
       (printf "    block ~a\n" exit-label)
       (printf "    get_global $i\n")
       (printf "    i32.load\n")
@@ -136,3 +144,6 @@
          (for-each Cmd c1*)
          (printf "))\n")])
   (Prog p))
+
+(define (compile-file fname)
+  (gen-wasm (parse-file fname)))
